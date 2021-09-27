@@ -27,20 +27,9 @@
 import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-vue';
 import { defineComponent, onMounted, ref } from 'vue';
 
-const listData: Record<string, string>[] = [];
-for (let i = 0; i < 23; i++) {
-  listData.push({
-    href: 'https://www.antdv.com/',
-    title: `ant design vue part ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-    content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-  });
-}
-
 import axios  from "axios";
+axios.defaults.baseURL = process.env.VUE_APP_SERVER;
+
 export default defineComponent({
   name: 'Home',
   components: {
@@ -54,7 +43,7 @@ export default defineComponent({
 
     onMounted(()=>{
       console.log("onMounted");
-      axios.get("http://localhost:8880/ebook/list")
+      axios.get("/ebook/list")
           .then(function(response){
             const data = response.data;
             ebooks.value = data.content;
@@ -76,7 +65,6 @@ export default defineComponent({
 
     return {
       ebooks,
-      listData,
       pagination,
       actions,
     };
