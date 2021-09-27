@@ -35,3 +35,7 @@ insert into `ebook`(id, name, description) values(1, 'Spring Boot Introduction',
 insert into `ebook`(id, name, description) values(2, 'Python Introduction', 'Python Introduction Book Description');
 insert into `ebook`(id, name, description) values(3, 'Vue Introduction', 'Vue Introduction Book Description');
 insert into `ebook`(id, name, description) values(4, 'Oracle Introduction', 'Oracle Introduction Book Description');
+insert into `ebook`(id, name, description) values(5, 'Ajax Introduction', 'Oracle Introduction Book Description');
+insert into `ebook`(id, name, description) values(6, 'Python Introduction', 'Oracle Introduction Book Description');
+insert into `ebook`(id, name, description) values(7, 'Eclipse Introduction', 'Oracle Introduction Book Description');
+insert into `ebook`(id, name, description) values(8, 'Tensor Flow Introduction', 'Oracle Introduction Book Description');

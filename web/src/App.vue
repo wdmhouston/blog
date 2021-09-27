@@ -2,7 +2,7 @@
   <a-layout>
     <the-header></the-header>
 
-    <a-layout style="padding: 0px;">
+    <a-layout style="padding: 24px;">
       <a-layout-sider width="200" style="background: #fff">
         <a-menu
             mode="inline"
