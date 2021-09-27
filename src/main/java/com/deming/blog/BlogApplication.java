@@ -1,13 +1,23 @@
 package com.deming.blog;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.env.Environment;
+
+import javax.swing.*;
 
 @SpringBootApplication
 public class BlogApplication {
-	//default main application
-	public static void main(String[] args) {
-		SpringApplication.run(BlogApplication.class, args);
-	}
 
+	private static Logger LOG = LoggerFactory.getLogger(BlogApplication.class);
+
+	public static void main(String[] args) {
+		//SpringApplication.run(BlogApplication.class, args);
+		SpringApplication app = new SpringApplication(BlogApplication.class);
+		Environment env = app.run(args).getEnvironment();
+		LOG.info("Started successfully");
+		LOG.info("Address:\thttp://127.0.0.1:{}", env.getProperty("server.port"));
+	}
 }
