@@ -1,4 +1,4 @@
-package om.deming.blog.mapper;
+package com.deming.blog.mapper;
 
 import com.deming.blog.domain.Demo;
 import com.deming.blog.domain.DemoExample;
