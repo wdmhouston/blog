@@ -28,7 +28,6 @@ import { StarOutlined, LikeOutlined, MessageOutlined } from '@ant-design/icons-v
 import { defineComponent, onMounted, ref } from 'vue';
 
 import axios  from "axios";
-axios.defaults.baseURL = process.env.VUE_APP_SERVER;
 
 export default defineComponent({
   name: 'Home',
@@ -47,7 +46,6 @@ export default defineComponent({
           .then(function(response){
             const data = response.data;
             ebooks.value = data.content;
-            console.log(response);
           });
     });
 
