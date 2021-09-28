@@ -5,6 +5,7 @@ import com.deming.blog.domain.EbookExample;
 import com.deming.blog.mapper.EbookMapper;
 import com.deming.blog.req.EbookReq;
 import com.deming.blog.resp.EbookResp;
+import com.deming.blog.resp.PageResp;
 import com.deming.blog.util.CopyUtil;
 //import org.springframework.beans.BeanUtils;
 import com.github.pagehelper.PageHelper;
@@ -25,7 +26,8 @@ public class EbookService {
     @Resource  //or@autowire
     private EbookMapper ebookMapper;
 
-    public List<EbookResp> list(EbookReq req) {
+    //public List<EbookResp> list(EbookReq req) {
+    public PageResp<EbookResp> list(EbookReq req) {
 
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
@@ -33,7 +35,7 @@ public class EbookService {
             criteria.andNameLike('%' + req.getName() + '%');
         }
 
-        PageHelper.startPage(1,3);
+        PageHelper.startPage(req.getPage(),req.getSize());
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
 
         PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
@@ -55,8 +57,13 @@ public class EbookService {
         }*/
 
         //List<EbookResp> respList = CopyUtil.copyList(ebookList, EbookResp.class);
+        //return CopyUtil.copyList(ebookList, EbookResp.class);
 
-        return CopyUtil.copyList(ebookList, EbookResp.class);
+        List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
+        PageResp<EbookResp> pageResp = new PageResp<>();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(list);
+        return pageResp;
     }
 
 }
