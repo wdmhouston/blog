@@ -7,7 +7,11 @@ import com.deming.blog.req.EbookReq;
 import com.deming.blog.resp.EbookResp;
 import com.deming.blog.util.CopyUtil;
 //import org.springframework.beans.BeanUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.mysql.cj.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -16,17 +20,23 @@ import java.util.List;
 
 @Service
 public class EbookService {
+    private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
 
     @Resource  //or@autowire
     private EbookMapper ebookMapper;
 
     public List<EbookResp> list(EbookReq req) {
+        PageHelper.startPage(1,3);
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
         if (!ObjectUtils.isEmpty(req.getName())){
             criteria.andNameLike('%' + req.getName() + '%');
         }
         List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
+
+        PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
+        LOG.info("Total Rows:" + pageInfo.getTotal());
+        LOG.info("Total Pages:" + pageInfo.getPages());
 
 /*        List<EbookResp> respList1 = new ArrayList<>();
         for (Ebook ebook : ebookList){
