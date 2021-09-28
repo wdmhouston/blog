@@ -3,14 +3,11 @@
     <a-layout-sider width="200" style="background: #fff">
       <a-menu
           mode="inline"
-          v-model:selectedKeys="selectedKeys2"
-          v-model:openKeys="openKeys"
           :style="{ height: '100%', borderRight: 0 }"
       >
         <a-sub-menu key="sub1">
           <template #title>
               <span>
-                <user-outlined />
                 subnav 1
               </span>
           </template>
@@ -22,7 +19,6 @@
         <a-sub-menu key="sub2">
           <template #title>
               <span>
-                <laptop-outlined />
                 subnav 2
               </span>
           </template>
@@ -34,7 +30,6 @@
         <a-sub-menu key="sub3">
           <template #title>
               <span>
-                <notification-outlined />
                 subnav 3
               </span>
           </template>
@@ -47,7 +42,7 @@
     </a-layout-sider>
   <a-layout>
     <a-layout-content>
-      <a-list item-layout="vertical" size="large" :grid="{gutter: 20, column:4}"  :data-source="ebooks">
+      <a-list item-layout="vertical" size="large" :grid="{gutter: 20, column:3}"  :data-source="ebooks">
       <template #renderItem="{ item }">
         <a-list-item key="item.name">
           <template #actions>
@@ -92,13 +87,13 @@ export default defineComponent({
       axios.get("/ebook/list")
           .then(function(response){
             const data = response.data;
-            ebooks.value = data.content;
+            ebooks.value = data.content.list;
           });
     });
 
     const pagination = {
       onChange: (page: number) => {
-        console.log(page);
+          console.log(page);
       },
       pageSize: 3,
     };

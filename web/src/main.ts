@@ -5,6 +5,7 @@ import store from './store'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 import axios from "axios";
+import 'default-passive-events'
 
 axios.defaults.baseURL = process.env.VUE_APP_SERVER;
 /**
