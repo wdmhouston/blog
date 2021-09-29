@@ -207,16 +207,21 @@ export default defineComponent({
          console.log(response);
          loading.value = false;
          const data = response.data;
-         ebooks.value = data.content.list;
-         pagination.value.current = params.page;
-         pagination.value.total = data.content.total;
+         if (data.success) {
+           ebooks.value = data.content.list;
+           pagination.value.current = params.page;
+           pagination.value.total = data.content.total;
+         }else{
+           message.error(data.message);
+         }
+
        });
      };
 
     onMounted(() => {
       //handleQueryCategory();
       console.log("onMount  ");
-      handleQuery({page:1, size:4});
+      handleQuery({page:1, size:1001});
     });
 
     return {
