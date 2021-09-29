@@ -138,10 +138,25 @@ export default defineComponent({
     const handleModalOk = () => {
       console.log("call handleModelOk--------------------->");
       modalLoading.value = true;
-      setTimeout(()=>{
+      //setTimeout(()=>{
+      //    modalVisible.value = false;
+      //    modalLoading.value = false;
+      //  },2000);
+      axios.post("/ebook/save", ebook.value).then((response) => {
+        modalLoading.value = true;
+        const data = response.data;
+        if (data.success) {
           modalVisible.value = false;
           modalLoading.value = false;
-        },2000);
+          // 重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize,
+          });
+        } else {
+          message.error(data.message);
+        }
+      });
       console.log("call handleModelOk done--------------------->");
     };
 

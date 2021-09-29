@@ -1,19 +1,14 @@
 package com.deming.blog.controller;
 
-import com.deming.blog.domain.Demo;
-import com.deming.blog.domain.Ebook;
-import com.deming.blog.req.EbookReq;
+import com.deming.blog.req.EbookQueryReq;
+import com.deming.blog.req.EbookSaveReq;
 import com.deming.blog.resp.CommonResp;
-import com.deming.blog.resp.EbookResp;
+import com.deming.blog.resp.EbookQueryResp;
 import com.deming.blog.resp.PageResp;
-import com.deming.blog.service.DemoService;
 import com.deming.blog.service.EbookService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 @RestController
 @RequestMapping("/ebook")
@@ -22,13 +17,22 @@ public class EbookController {
     private EbookService ebookService;
 
     @GetMapping("/list")
-    public CommonResp list(EbookReq req){
+    public CommonResp list(EbookQueryReq req){
         //CommonResp<List<EbookResp>> resp = new CommonResp<>();
         //List<EbookResp> list = ebookService.list(req);
 
-        CommonResp<PageResp<EbookResp>> resp = new CommonResp<>();
-        PageResp<EbookResp> list  = ebookService.list(req);
+        CommonResp<PageResp<EbookQueryResp>> resp = new CommonResp<>();
+        PageResp<EbookQueryResp> list  = ebookService.list(req);
         resp.setContent(list);
+        return resp;
+    }
+
+    @PostMapping("/save")
+    public CommonResp save(@RequestBody EbookSaveReq req){
+        //RequestBody is for content type json.
+        //if it's form submit, no need to add @RequestBody
+        CommonResp resp = new CommonResp<>();
+        ebookService.save(req);
         return resp;
     }
 }

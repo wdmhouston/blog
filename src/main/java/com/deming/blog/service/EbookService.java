@@ -3,14 +3,14 @@ package com.deming.blog.service;
 import com.deming.blog.domain.Ebook;
 import com.deming.blog.domain.EbookExample;
 import com.deming.blog.mapper.EbookMapper;
-import com.deming.blog.req.EbookReq;
-import com.deming.blog.resp.EbookResp;
+import com.deming.blog.req.EbookQueryReq;
+import com.deming.blog.req.EbookSaveReq;
+import com.deming.blog.resp.EbookQueryResp;
 import com.deming.blog.resp.PageResp;
 import com.deming.blog.util.CopyUtil;
 //import org.springframework.beans.BeanUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.mysql.cj.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class EbookService {
     private EbookMapper ebookMapper;
 
     //public List<EbookResp> list(EbookReq req) {
-    public PageResp<EbookResp> list(EbookReq req) {
+    public PageResp<EbookQueryResp> list(EbookQueryReq req) {
 
         EbookExample ebookExample = new EbookExample();
         EbookExample.Criteria criteria = ebookExample.createCriteria();
@@ -59,11 +59,20 @@ public class EbookService {
         //List<EbookResp> respList = CopyUtil.copyList(ebookList, EbookResp.class);
         //return CopyUtil.copyList(ebookList, EbookResp.class);
 
-        List<EbookResp> list = CopyUtil.copyList(ebookList, EbookResp.class);
-        PageResp<EbookResp> pageResp = new PageResp<>();
+        List<EbookQueryResp> list = CopyUtil.copyList(ebookList, EbookQueryResp.class);
+        PageResp<EbookQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
         return pageResp;
+    }
+
+    public void save(EbookSaveReq req){
+        Ebook ebook = CopyUtil.copy(req, Ebook.class);
+        if(ObjectUtils.isEmpty(req.getId())) {
+            ebookMapper.insert(ebook);
+        }else {
+            ebookMapper.updateByPrimaryKey(ebook);
+        }
     }
 
 }

@@ -1,6 +1,6 @@
-package com.deming.blog.resp;
+package com.deming.blog.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;
