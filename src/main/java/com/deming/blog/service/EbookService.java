@@ -9,6 +9,7 @@ import com.deming.blog.resp.EbookQueryResp;
 import com.deming.blog.resp.PageResp;
 import com.deming.blog.util.CopyUtil;
 //import org.springframework.beans.BeanUtils;
+import com.deming.blog.util.SnowFlake;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ public class EbookService {
 
     @Resource  //or@autowire
     private EbookMapper ebookMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
 
     //public List<EbookResp> list(EbookReq req) {
     public PageResp<EbookQueryResp> list(EbookQueryReq req) {
@@ -69,6 +73,7 @@ public class EbookService {
     public void save(EbookSaveReq req){
         Ebook ebook = CopyUtil.copy(req, Ebook.class);
         if(ObjectUtils.isEmpty(req.getId())) {
+            ebook.setId(snowFlake.nextId());
             ebookMapper.insert(ebook);
         }else {
             ebookMapper.updateByPrimaryKey(ebook);
