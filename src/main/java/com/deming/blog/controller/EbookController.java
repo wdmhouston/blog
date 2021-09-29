@@ -35,4 +35,13 @@ public class EbookController {
         ebookService.save(req);
         return resp;
     }
+
+    @DeleteMapping("/delete/{id}")
+    public CommonResp delete(@PathVariable Long id){
+        //RequestBody is for content type json.
+        //if it's form submit, no need to add @RequestBody
+        CommonResp resp = new CommonResp<>();
+        ebookService.delete(id);
+        return resp;
+    }
 }
