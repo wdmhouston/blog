@@ -32,3 +32,17 @@ build/
 
 ### VS Code ###
 .vscode/
+/node_modules/default-passive-events/dist/index.js
+/node_modules/default-passive-events/src/index.js
+/node_modules/default-passive-events/dist/index.js.map
+/node_modules/default-passive-events/dist/index.modern.js
+/node_modules/default-passive-events/dist/index.modern.js.map
+/node_modules/default-passive-events/dist/index.module.js
+/node_modules/default-passive-events/dist/index.module.js.map
+/node_modules/default-passive-events/dist/index.umd.js
+/node_modules/default-passive-events/dist/index.umd.js.map
+/node_modules/default-passive-events/LICENSE
+/node_modules/default-passive-events/package.json
+/node_modules/default-passive-events/README.md
+/node_modules/default-passive-events/src/utils.js
+/node_modules/default-passive-events/yarn.lock
