@@ -24,7 +24,7 @@
       <a-table
           :columns="columns"
           :row-key="record => record.id"
-          :data-source="categorys"
+          :data-source="level1"
           :loading="loading"
           :pagination="false"
       >
@@ -71,6 +71,14 @@
       </a-form-item>
       <a-form-item label="Parent Category">
         <a-input v-model:value="category.parent" />
+        <a-select v-model:value="category.parent" ref="select">
+          <a-select-option value="0">
+            None
+          </a-select-option>
+          <a-select-option v-for="c in level1" :key="c.id" :value="c.id" :disabled="category.id === c.id">
+            {{c.name}}
+          </a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item label="Sort">
         <a-input v-model:value="category.sort" />
@@ -91,7 +99,7 @@ export default defineComponent({
   setup() {
     const param = ref();
     param.value = {};
-    const categorys = ref();
+    //const categorys = ref();
 
     const loading = ref(false);
     const columns = [
@@ -173,7 +181,18 @@ export default defineComponent({
       });
     };
 
-    const level1 =  ref();
+    const level1 =  ref(); //top level1 fo the tree data
+    /**
+     * [{
+     *    id:"",
+     *    name:"",
+     *    children:[{
+     *      id:"",
+     *      name"",
+     *    }]
+     *
+     * }]
+     */
 
     const handleQuery = () =>{
       console.log("handleQuery calling----------------------->");
@@ -184,7 +203,11 @@ export default defineComponent({
         loading.value = false;
         const data = response.data;
         if (data.success) {
-          categorys.value = data.content;
+          //categorys.value = data.content;
+          level1.value=[];
+          level1.value = Tool.array2Tree(data.content, 0);
+          console.log("level1=");
+          console.log(level1);
         }else{
           message.error(data.message);
         }
@@ -200,7 +223,7 @@ export default defineComponent({
 
     return {
       param,
-      categorys,
+      //categorys,
       columns,
       loading,
       handleQuery,
