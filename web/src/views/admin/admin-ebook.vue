@@ -17,7 +17,7 @@
         <template v-slot:category="">
           <span>Category</span>
         </template>
-        <template v-slot:action="{ record }">
+        <template v-slot:action="{ text, record }">
           <a-space size="small">
 
               <a-button type="primary">
@@ -46,6 +46,7 @@
       title="电子书表单"
       v-model:visible="modalVisible"
       :confirm-loading="modalLoading"
+      @ok="handleModalOk"
   >
     <a-form :model="ebook" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="封面">
@@ -131,27 +132,16 @@ export default defineComponent({
     /**
      * 数组，[100, 101]对应：前端开发 / Vue
      */
-    const ebook = ref();
+    const ebook = ref({});
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     const handleModalOk = () => {
       console.log("call handleModelOk--------------------->");
       modalLoading.value = true;
-      axios.post("/ebook/save", ebook.value).then((response) => {
-        modalLoading.value = false;
-        const data = response.data; // data = commonResp
-        if (data.success) {
+      setTimeout(()=>{
           modalVisible.value = false;
-
-          // 重新加载列表
-          handleQuery({
-            page: pagination.value.current,
-            size: pagination.value.pageSize,
-          });
-        } else {
-          message.error(data.message);
-        }
-      });
+          modalLoading.value = false;
+        },2000);
       console.log("call handleModelOk done--------------------->");
     };
 
@@ -160,7 +150,8 @@ export default defineComponent({
      */
     const edit = (record: any) => {
       modalVisible.value = true;
-      ebook.value = Tool.copy(record);
+      ebook.value = record;
+      //ebook.value = Tool.copy(record);
     };
 
     /**
