@@ -28,7 +28,7 @@ public class EbookController {
     }
 
     @PostMapping("/save")
-    public CommonResp save(@RequestBody EbookSaveReq req){
+    public CommonResp save(@Valid @RequestBody EbookSaveReq req){
         //RequestBody is for content type json.
         //if it's form submit, no need to add @RequestBody
         CommonResp resp = new CommonResp<>();

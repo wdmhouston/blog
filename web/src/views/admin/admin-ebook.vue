@@ -4,9 +4,22 @@
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
       <p>
-        <a-button type="primary" @click="add()" size="large">
-            Add New
-        </a-button>
+        <a-form layout="inline" :model="param">
+          <a-form-item>
+            <a-input v-model:value="param.name" placeholder="名称">
+            </a-input>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="handleQuery({page: 1, size: pagination.pageSize})">
+              查询
+            </a-button>
+          </a-form-item>
+          <a-form-item>
+            <a-button type="primary" @click="add()">
+              新增
+            </a-button>
+          </a-form-item>
+        </a-form>
       </p>
       <a-table
           :columns="columns"
@@ -148,7 +161,7 @@ export default defineComponent({
       //    modalLoading.value = false;
       //  },2000);
       axios.post("/ebook/save", ebook.value).then((response) => {
-        modalLoading.value = true;
+        modalLoading.value = false;
         const data = response.data;
         if (data.success) {
           modalVisible.value = false;
@@ -170,8 +183,8 @@ export default defineComponent({
      */
     const edit = (record: any) => {
       modalVisible.value = true;
-      ebook.value = record;
-      //ebook.value = Tool.copy(record);
+      //ebook.value = record;
+      ebook.value = Tool.copy(record);
     };
 
     /**
@@ -202,7 +215,13 @@ export default defineComponent({
     const handleQuery = (params: any) =>{
        console.log("handleQuery calling----------------------->");
        loading.value = true;
-       axios.get("/ebook/list", {params:params}).then((response)=>{
+       axios.get("/ebook/list", {
+         params:{
+           page: params.page,
+           size: params.size,
+           name: param.value.name
+         }
+       }).then((response)=>{
          console.log("handleQuery calling returned----------------------->");
          console.log(response);
          loading.value = false;
@@ -221,7 +240,7 @@ export default defineComponent({
     onMounted(() => {
       //handleQueryCategory();
       console.log("onMount  ");
-      handleQuery({page:1, size:1001});
+      handleQuery({page:1, size:4});
     });
 
     return {
