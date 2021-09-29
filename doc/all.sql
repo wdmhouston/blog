@@ -29,7 +29,7 @@ create table `ebook`(
         `view_count` int comment 'view count',
         `vote_count` int comment 'vote count',
         primary key (`id`)
-)engine=innodb default charset=utf8mb4 comment='ebook';
+) engine=innodb default charset=utf8mb4 comment='ebook';
 
 insert into `ebook`(id, name, description) values(1, 'Spring Boot Introduction', 'Spring Boot Introduction Book Description');
 insert into `ebook`(id, name, description) values(2, 'Python Introduction', 'Python Introduction Book Description');
@@ -39,3 +39,29 @@ insert into `ebook`(id, name, description) values(5, 'Ajax Introduction', 'Oracl
 insert into `ebook`(id, name, description) values(6, 'Python Introduction', 'Oracle Introduction Book Description');
 insert into `ebook`(id, name, description) values(7, 'Eclipse Introduction', 'Oracle Introduction Book Description');
 insert into `ebook`(id, name, description) values(8, 'Tensor Flow Introduction', 'Oracle Introduction Book Description');
+
+drop table if exists `category`;
+create table  `category` (
+    `id` bigint not null comment 'id',
+    `parent` bigint not null default 0 comment 'parent id',
+    `name` varchar(50) not null comment 'name',
+    `sort` int comment 'sort',
+    primary key (`id`)
+) engine=innodb default charset=utf8mb4 comment='category';
+
+insert into `category` (id, parent, name, sort) values(100, 000, 'Front Development', 100);
+insert into `category` (id, parent, name, sort) values(101, 100, 'Vue', 101);
+insert into `category` (id, parent, name, sort) values(102, 100, 'HTML & CSS', 102);
+insert into `category` (id, parent, name, sort) values(200, 000, 'Java', 200);
+insert into `category` (id, parent, name, sort) values(201, 200, 'Basic Application', 201);
+insert into `category` (id, parent, name, sort) values(202, 200, 'Framework Application', 202);
+insert into `category` (id, parent, name, sort) values(300, 000, 'Python', 300);
+insert into `category` (id, parent, name, sort) values(301, 300, 'Basic Application', 301);
+insert into `category` (id, parent, name, sort) values(302, 300, 'Next Level Application', 302);
+insert into `category` (id, parent, name, sort) values(400, 000, 'Database', 400);
+insert into `category` (id, parent, name, sort) values(401, 400, 'MySQL', 401);
+insert into `category` (id, parent, name, sort) values(500, 000, 'Other', 500);
+insert into `category` (id, parent, name, sort) values(501, 500, 'Server', 501);
+insert into `category` (id, parent, name, sort) values(502, 500, 'Development Tool', 502);
+insert into `category` (id, parent, name, sort) values(503, 500,'Hot Server Language', 503);
+
