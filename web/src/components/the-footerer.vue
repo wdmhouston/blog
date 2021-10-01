@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer style="text-align: center">
-    Ant Design ©2018 Created by Deming Wang
+    ©2021 Created by Deming
   </a-layout-footer>
 </template>
 

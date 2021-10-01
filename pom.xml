@@ -62,6 +62,8 @@
 	</dependencies>
 
 	<build>
+		<!-- location /target/dist/ -->
+		<finalName>/dist/blog</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
