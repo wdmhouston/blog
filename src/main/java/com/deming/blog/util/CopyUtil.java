@@ -6,9 +6,10 @@ import org.springframework.util.CollectionUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class CopyUtil {
     /**
-     * 单体复制
+     * Single Object Copy
      */
     public static <T> T copy(Object source, Class<T> clazz) {
         if (source == null) {
@@ -26,7 +27,7 @@ public class CopyUtil {
     }
 
     /**
-     * 列表复制
+     * List Object Copy
      */
     public static <T> List<T> copyList(List source, Class<T> clazz) {
         List<T> target = new ArrayList<>();

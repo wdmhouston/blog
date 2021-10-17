@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 统一异常处理、数据预处理等 ControllerAdvice
+ * ControllerAdvice
  */
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -18,7 +18,7 @@ public class ControllerExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
     /**
-     * 校验异常统一处理
+     *
      * @param e
      * @return
      */
@@ -33,7 +33,7 @@ public class ControllerExceptionHandler {
     }
 
     /**
-     * 校验异常统一处理
+     *
      * @param e
      * @return
      */
@@ -41,14 +41,14 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public CommonResp validExceptionHandler(BusinessException e) {
         CommonResp commonResp = new CommonResp();
-        LOG.warn("业务异常：{}", e.getCode().getDesc());
+        LOG.warn("Exception：{}", e.getCode().getDesc());
         commonResp.setSuccess(false);
         commonResp.setMessage(e.getCode().getDesc());
         return commonResp;
     }
 
     /**
-     * 校验异常统一处理
+     *
      * @param e
      * @return
      */
@@ -56,9 +56,9 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public CommonResp validExceptionHandler(Exception e) {
         CommonResp commonResp = new CommonResp();
-        LOG.error("系统异常：", e);
+        LOG.error("System Exception：", e);
         commonResp.setSuccess(false);
-        commonResp.setMessage("系统出现异常，请联系管理员");
+        commonResp.setMessage("System exception capture, please contact admin.");
         return commonResp;
     }
 }

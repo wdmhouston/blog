@@ -2,6 +2,10 @@ package com.deming.blog.resp;
 
 import java.util.List;
 
+/**
+ * Page class for pagination in vue
+ * @param <T>
+ */
 public class PageResp<T> {
     private long total;
 

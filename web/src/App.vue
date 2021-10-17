@@ -1,5 +1,5 @@
 <template>
-  <a-layout>
+  <a-layout :style="{maxWidth: '1024px'}">
     <the-header></the-header>
     <router-view/>
     <the-footer></the-footer>

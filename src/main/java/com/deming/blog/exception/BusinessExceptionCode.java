@@ -2,9 +2,9 @@ package com.deming.blog.exception;
 
 public enum BusinessExceptionCode {
 
-    USER_LOGIN_NAME_EXIST("登录名已存在"),
-    LOGIN_USER_ERROR("用户名不存在或密码错误"),
-    VOTE_REPEAT("您已点赞过"),
+    USER_LOGIN_NAME_EXIST("Login name exists"),
+    LOGIN_USER_ERROR("Wrong username or password"),
+    VOTE_REPEAT("Voted"),
     ;
 
     private String desc;

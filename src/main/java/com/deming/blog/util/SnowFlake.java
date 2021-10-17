@@ -5,22 +5,22 @@ import org.springframework.stereotype.Component;
 import java.text.ParseException;
 
 /**
- * Twitter的分布式自增ID雪花算法
+ * Twitter Distributed ID generator
  **/
 @Component
 public class SnowFlake {
 
     /**
-     * 起始的时间戳
+     * Start Timestamp
      */
     private final static long START_STMP = 1609459200000L; // 2021-01-01 00:00:00
 
     /**
-     * 每一部分占用的位数
+     * Digit for each part
      */
-    private final static long SEQUENCE_BIT = 12; //序列号占用的位数
-    private final static long MACHINE_BIT = 5;   //机器标识占用的位数
-    private final static long DATACENTER_BIT = 5;//数据中心占用的位数
+    private final static long SEQUENCE_BIT = 12; //序SEQUENCE
+    private final static long MACHINE_BIT = 5;   //MACHINE
+    private final static long DATACENTER_BIT = 5;//DATACENTER
 
     /**
      * 每一部分的最大值
@@ -36,10 +36,10 @@ public class SnowFlake {
     private final static long DATACENTER_LEFT = SEQUENCE_BIT + MACHINE_BIT;
     private final static long TIMESTMP_LEFT = DATACENTER_LEFT + DATACENTER_BIT;
 
-    private long datacenterId = 1;  //数据中心
-    private long machineId = 1;     //机器标识
-    private long sequence = 0L; //序列号
-    private long lastStmp = -1L;//上一次时间戳
+    private long datacenterId = 1;  //datacenter
+    private long machineId = 1;     //machine
+    private long sequence = 0L; //sequence
+    private long lastStmp = -1L;//last timestamp
 
     public SnowFlake() {
     }
@@ -56,7 +56,7 @@ public class SnowFlake {
     }
 
     /**
-     * 产生下一个ID
+     * Generate next id
      *
      * @return
      */
@@ -99,16 +99,12 @@ public class SnowFlake {
     }
 
     public static void main(String[] args) throws ParseException {
-        // 时间戳
         // System.out.println(System.currentTimeMillis());
         // System.out.println(new Date().getTime());
-        //
         // String dateTime = "2021-01-01 08:00:00";
         // SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         // System.out.println(sdf.parse(dateTime).getTime());
-
         SnowFlake snowFlake = new SnowFlake(1, 1);
-
         long start = System.currentTimeMillis();
         for (int i = 0; i < 10; i++) {
             System.out.println(snowFlake.nextId());

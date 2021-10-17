@@ -10,7 +10,7 @@
 // import javax.servlet.http.HttpServletResponse;
 //
 // /**
-//  * 拦截器：Spring框架特有的，常用于登录校验，权限校验，请求日志打印 /login
+//  * Spring Intercepter
 //  */
 // @Component
 // public class LogInterceptor implements HandlerInterceptor {
@@ -19,7 +19,7 @@
 //
 //     @Override
 //     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//         // 打印请求信息
+//         // Print request info
 //         LOG.info("------------- LogInterceptor Start -------------");
 //         LOG.info("Request Address: {} {}", request.getRequestURL().toString(), request.getMethod());
 //         LOG.info("Remote Address: {}", request.getRemoteAddr());

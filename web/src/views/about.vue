@@ -1,32 +1,8 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    <a-button type="primary" :size="size" @click="test()">Primary</a-button>
-  </div>
+  <a-layout>
+    <a-layout-content :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }">
+
+    </a-layout-content>
+  </a-layout>
 </template>
-
-
-<script lang="ts">
-import { defineComponent, onMounted, ref, reactive, toRef } from 'vue';
-import axios from 'axios';
-import { message } from 'ant-design-vue';
-import {Tool} from "@/util/tool";
-import TheWelcome from '@/components/the-welcome.vue';
-
-export default defineComponent({
-  name: 'about',
-  components: {
-  },
-  setup() {
-
-    const test = () => {
-      window.location.href = "http://www.google.com";
-    };
-
-    return {
-      test
-    }
-  }
-});
-</script>
 

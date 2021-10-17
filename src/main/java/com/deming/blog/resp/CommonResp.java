@@ -1,18 +1,22 @@
 package com.deming.blog.resp;
 
+/**
+ * Common response
+ * @param <T>
+ */
 public class CommonResp<T> {
     /**
-     * 业务上的成功或失败
+     * success or fail
      */
     private boolean success = true;
 
     /**
-     * 返回信息
+     * return message
      */
     private String message;
 
     /**
-     * 返回泛型数据，自定义类型
+     * return data
      */
     private T content;
 

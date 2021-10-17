@@ -32,7 +32,7 @@
           </template>
           <div class="clearfix">
             <a-upload
-                action="http://127.0.0.1:8880/file/upload"
+                action="http://35.202.95.240:8880/file/upload"
                 list-type="picture-card"
                 v-model:file-list="fileList"
                 :multiple="true"
@@ -48,6 +48,22 @@
               <img alt="example" style="width: 100%" :src="previewImage" />
             </a-modal>
           </div>
+
+          <a-divider style="height: 1px; background-color: #7cb305" />
+
+          <a-timeline :reverse="true" style="margin:0px 0px 0px 3px">
+            <a-timeline-item v-for="item in userPredictList" :value="item.image" :key="item.image" color="red">
+              <template #dot><clock-circle-outlined style="font-size: 16px" /></template>
+              <p>{{item.image}}</p>
+              <a-alert v-bind:message=item.predict type="success" />
+              <a-image :width="200" v-bind:src=item.image_url />
+              <a-collapse accordion>
+                <a-collapse-panel header="View json data returned from Api">
+                  <span v-html="item.content"></span>
+                </a-collapse-panel>
+              </a-collapse>
+            </a-timeline-item>
+          </a-timeline>
         </a-tab-pane>
         <a-tab-pane key="3">
           <template #tab>
@@ -55,40 +71,37 @@
           Predict History
         </span>
           </template>
-          <a-timeline>
-            <a-timeline-item color="green">Create a services site 2015-09-01</a-timeline-item>
-            <a-timeline-item color="green">Create a services site 2015-09-01</a-timeline-item>
-            <a-timeline-item color="red">
-              <p>Solve initial network problems 1</p>
-              <p>Solve initial network problems 2</p>
-              <p>Solve initial network problems 3 2015-09-01</p>
-            </a-timeline-item>
-            <a-timeline-item>
-              <p>Technical testing 1</p>
-              <p>Technical testing 2</p>
-              <p>Technical testing 3 2015-09-01</p>
-            </a-timeline-item>
-            <a-timeline-item color="gray">
-              <p>Technical testing 1</p>
-              <p>Technical testing 2</p>
-              <p>Technical testing 3 2015-09-01</p>
-            </a-timeline-item>
-            <a-timeline-item color="gray">
-              <p>Technical testing 1</p>
-              <p>Technical testing 2</p>
-              <p>Technical testing 3 2015-09-01</p>
+          <a-timeline :reverse="true" style="margin:0px 0px 0px 3px">
+            <a-timeline-item v-for="item in userPredictHistoryList" :value="item.image" :key="item.image" color="red">
+              <template #dot><clock-circle-outlined style="font-size: 16px" /></template>
+              <p>{{item.image}}
+                  <LaptopOutlined twoToneColor="#eb2f96" /> {{item.ip}}
+                  <ClockCircleOutlined twoToneColor="#eb2f96" /> {{item.timestampStr}}
+              </p>
+              <a-alert v-bind:message=item.message type="success" />
+              <a-image :width="200" v-bind:src=item.imageUrl />
+              <a-collapse accordion>
+                <a-collapse-panel header="View json data returned from Api">
+                  {{item.content}}
+                </a-collapse-panel>
+              </a-collapse>
             </a-timeline-item>
           </a-timeline>
+          <a-pagination v-model:current="pagination.current"
+                        :total="pagination.total"
+                        :pageSize="pagination.pageSize"
+                        @change="userPredictHistoryListChange"
+                        show-less-items style="text-align: right"/>
         </a-tab-pane>
       </a-tabs>
     </a-layout-content>
   </a-layout>
 </template>
 <script lang="ts">
-import{PlusOutlined,LoadingOutlined} from '@ant-design/icons-vue';
+import{PlusOutlined,LoadingOutlined, ClockCircleOutlined, LaptopOutlined} from '@ant-design/icons-vue';
 import{ message } from 'ant-design-vue';
-import{ defineComponent, ref } from 'vue';
-
+import {defineComponent, onMounted, ref} from 'vue';
+import axios from "axios";
 
 function getBase64(file: File) {
   return new Promise((resolve, reject) => {
@@ -97,6 +110,11 @@ function getBase64(file: File) {
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
   });
+}
+
+interface FileInfo {
+  file: FileItem;
+  fileList: FileItem[];
 }
 
 interface FileItem {
@@ -110,22 +128,51 @@ interface FileItem {
   originFileObj?: any;
 }
 
-interface FileInfo {
-  file: FileItem;
-  fileList: FileItem[];
-}
-
 interface FileUploadMsg{
   success: boolean,
   message: string,
-  content: any,
+  content: FileUploadMsgContent,
+}
+
+interface FileUploadMsgContent{
+  name: string,
+  nameOri: string,
+  nameUrl: string,
+  content: FruitClassificationMsg
+}
+
+interface FruitClassificationMsg {
+  code: number,
+  message: string,
+  data: FruitClassificationData
+}
+
+interface FruitClassificationData {
+  image: string,
+  result: string,
+  probability: string
+}
+
+interface FruitClassificationDataHist {
+  timestamp: number,
+  timestampStr: string,
+  image: string,
+  imageUrl: string,
+  result: string,
+  probability: number,
+  ip: string,
+  content: string,
+  message: string
 }
 
 export default defineComponent({
   components: {
     PlusOutlined,
+    ClockCircleOutlined,
+    LaptopOutlined,
   },
   setup() {
+    //-----------------------File Upload----------------------
     const previewVisible = ref<boolean>(false);
     const previewImage = ref<string | undefined>('');
 
@@ -157,14 +204,93 @@ export default defineComponent({
       if (newFile.status == 'done'){
         if (newFile.response?.success){
           message.success({content: 'uploaded ' + newFile.name, key, duration:2});
-          console.log(newFile.response);
           fileList.value = newFileList;
+          const jsonResultStr = JSON.stringify(newFile.response.content.content, null, 2);
+          console.log(jsonResultStr);
+          userPredictListAdd(newFile.response?.content.nameOri,
+               newFile.response?.content.nameUrl,
+               newFile.response?.content.content.data.result,
+               newFile.response?.content.content.data.probability,
+               "<pre>" + jsonResultStr + "</pre>"
+          );
+          handleQueryPredictHistory({
+            page: pagination.value.current,
+            size: pagination.value.pageSize,
+          });
         }else{
           message.success({content: 'upload fail ' + newFile.response?.message, key, duration:2});
         }
         return;
       }
     };
+
+    //-----------------------Timeline of Current Predict----------------------
+    const userPredictList = ref();
+    userPredictList.value = [];
+
+    const userPredictListAdd = (image: string, image_url: string, result: string, probability: string, content: string) => {
+      console.log("userPredictListAdd called");
+      userPredictList.value.push({
+        image:image,
+        image_url:image_url,
+        predict:result.concat(" probability: ").concat(probability),
+        content:content});
+    };
+
+    //-----------------------Timeline of Current Predict History----------------------
+    const userPredictHistoryList = ref();
+    const pagination = ref({
+      current: 1,
+      pageSize: 10,
+      total: 0
+    });
+    const param = ref();
+    userPredictHistoryList.value = [];
+    const handleQueryPredictHistory = (params: any) => {
+      axios.get("/mlfruit/list", {
+        params: {
+          page: params.page,
+          size: params.size,
+        }
+      }).then((response) => {
+        console.log("mlfruit list returned")
+        const data = response.data;
+        console.log(data);
+        if (data.success) {
+          data.content.list.forEach((item: FruitClassificationDataHist)=>{
+            console.log(item.content);
+            item.message = item.result.concat(" probability: ").concat(item.probability.toString());
+            let date = new Date(item.timestamp*1000);
+            item.timestampStr = date.toLocaleString();
+            //item.content = `<pre>${item.content}</pre>`;
+          });
+          userPredictHistoryList.value = data.content.list;
+
+          pagination.value.current = params.page;
+          pagination.value.total = data.content.total;
+          console.log("userPredictHistoryList=");
+          console.log(userPredictHistoryList);
+        } else {
+          message.error(data.message);
+        }
+      });
+    };
+
+    const userPredictHistoryListChange = (page: any, pageSize: any) => {
+      console.log(pagination);
+      handleQueryPredictHistory({
+        page: page,
+        size: pageSize
+      });
+    };
+
+    onMounted(() => {
+      console.log("onMounted called");
+      handleQueryPredictHistory({
+        page: pagination.value.current,
+        size: pagination.value.pageSize,
+      });
+    });
 
     return {
       previewVisible,
@@ -174,6 +300,11 @@ export default defineComponent({
       handlePreview,
       handleChange,
       activeKey: ref('2'),
+      userPredictList,
+      pagination,
+      userPredictHistoryList,
+      handleQueryPredictHistory,
+      userPredictHistoryListChange,
     };
   },
 });

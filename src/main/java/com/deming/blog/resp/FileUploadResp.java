@@ -1,5 +1,9 @@
 package com.deming.blog.resp;
 
+/**
+ * File upload Response
+ * @param <T>
+ */
 public class FileUploadResp<T> {
 
     //File name
@@ -11,6 +15,7 @@ public class FileUploadResp<T> {
     //Name url for access
     private String nameUrl;
 
+    //Upload content
     private T content;
 
     public String getName() {
